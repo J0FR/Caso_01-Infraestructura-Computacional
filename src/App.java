@@ -22,27 +22,30 @@ public class App {
             System.out.println("El valor ingresado no es un entero válido. Por favor, ingrese el número de iteraciones:");
             scanner.next();
         }
-        iteraciones = scanner.nextInt(); 
+        iteraciones = scanner.nextInt();
+        final int iteraciones_total = iteraciones + 1; 
         scanner.close();
 
         barreraVerificacion = new CyclicBarrier(valores_de_matriz.length*valores_de_matriz.length*2, new Runnable() {
             @Override
             public void run() {
-                System.out.println("Barrera Desbloqueada - Verificacion");
-                App.printMatriz();
+
             }
         });
 
         barreraIteracion = new CyclicBarrier(valores_de_matriz.length*valores_de_matriz.length*2, new Runnable() {
             @Override
             public void run() {
-                System.out.println("Barrera Desbloqueada - Iteracion");
+                System.out.println("Turno - " + Math.abs(App.getIteraciones() - iteraciones_total));
                 App.decrementarIteraciones();
                 App.printMatriz();
             }
         });
 
         crearMatriz(valores_de_matriz);
+        System.out.println("Turno - " + 0);
+        App.printMatriz();
+        run(valores_de_matriz);
     }
 
 
@@ -79,6 +82,11 @@ public class App {
                 id++;
             }
         }
+        
+    }
+
+    public static void run(boolean[][] valores_matriz) {
+        int tamanio_matriz = valores_matriz.length;
         for (int i = 0; i < tamanio_matriz; i++) {
             for (int j = 0; j < tamanio_matriz; j++) {
                 matriz[i][j].asignarVecinos();
